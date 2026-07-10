@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Feliz cumpleaños :D</title>
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #111111;
+      color: #79ff72;
+      font-family: monospace;
+      text-align: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #d1d1d1;
+      line-height: 1.6;
+    }
+
+    button {
+      background-color: #111111;
+      color: #79ff72;
+      border: 2px solid #79ff72;
+      padding: 13px 22px;
+      font-family: monospace;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #79ff72;
+      color: #111111;
+    }
+
+    .pantalla {
+      min-height: 100vh;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .activa {
+      display: flex;
+    }
+
+    .ventana {
+      width: 600px;
+      max-width: 90%;
+      border: 3px solid #555555;
+      background-color: #181818;
+      padding: 25px;
+      box-shadow: 10px 10px 0 #000000;
+      position: relative;
+    }
+
+    .barra {
+      background-color: #333333;
+      padding: 8px;
+      text-align: left;
+      color: #cccccc;
+      margin: -25px -25px 25px -25px;
+    }
+
+    .punto {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    
+
+    .texto-terminal {
+      text-align: left;
+      min-height: 120px;
+      color: #79ff72;
+      margin-bottom: 20px;
+    }
+
+    .cursor {
+      animation: parpadear 0.7s infinite;
+    }
+
+    @keyframes parpadear {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    /* REGALO */
+
+    .regalo {
+      width: 180px;
+      height: 150px;
+      margin: 60px auto 20px auto;
+      position: relative;
+      cursor: pointer;
+      animation: mover 1s infinite alternate;
+    }
+
+    @keyframes mover {
+      from {
+        transform: rotate(-2deg);
+      }
+
+      to {
+        transform: rotate(2deg);
+      }
+    }
+
+    .caja {
+      position: absolute;
+      bottom: 0;
+      width: 180px;
+      height: 120px;
+      background-color: #313131;
+      border: 4px solid #79ff72;
+      box-sizing: border-box;
+    }
+
+    .cinta-vertical {
+      position: absolute;
+      left: 75px;
+      width: 30px;
+      height: 120px;
+      background-color: #79ff72;
+    }
+
+    .tapa {
+      position: absolute;
+      top: 15px;
+      left: -10px;
+      width: 200px;
+      height: 40px;
+      background-color: #222222;
+      border: 4px solid #79ff72;
+      box-sizing: border-box;
+      z-index: 2;
+      transition: 0.7s;
+    }
+
+    .regalo.abierto .tapa {
+      transform: translateY(-90px) rotate(-12deg);
+    }
+
+    .regalo.abierto {
+      animation: none;
+    }
+
+    .etiqueta {
+      position: absolute;
+      top: 67px;
+      left: 38px;
+      width: 105px;
+      background-color: #d6c65c;
+      color: #111111;
+      padding: 5px;
+      font-size: 12px;
+      transform: rotate(-4deg);
+      z-index: 4;
+    }
+
+    /* COSAS QUE SALEN */
+
+    .sorpresa {
+      position: absolute;
+      left: 75px;
+      top: 60px;
+      font-size: 35px;
+      opacity: 0;
+      transition: 1s;
+    }
+
+    .regalo.abierto .uno {
+      opacity: 1;
+      transform: translate(-100px, -140px) rotate(-15deg);
+    }
+
+    .regalo.abierto .dos {
+      opacity: 1;
+      transform: translate(90px, -130px) rotate(10deg);
+    }
+
+    .regalo.abierto .tres {
+      opacity: 1;
+      transform: translate(-60px, -200px);
+    }
+
+    .regalo.abierto .cuatro {
+      opacity: 1;
+      transform: translate(55px, -210px);
+    }
+
+    .regalo.abierto .cinco {
+      opacity: 1;
+      transform: translate(0, -155px);
+    }
+
+    /* MENSAJE */
+
+    #mensajeCumple {
+      display: none;
+      margin-top: 35px;
+      border: 2px dashed #79ff72;
+      padding: 20px;
+      background-color: #101510;
+    }
+
+    #mensajeCumple h2 {
+      font-size: 32px;
+      margin: 0;
+      color: #ffffff;
+    }
+
+    .error {
+      color: #ff6868;
+    }
+
+    .nota {
+      background-color: #d7d1a9;
+      color: #222222;
+      padding: 20px;
+      max-width: 430px;
+      margin: 20px auto;
+      transform: rotate(-1deg);
+      font-family: monospace;
+      text-align: left;
+      box-shadow: 7px 7px 0 #000000;
+    }
+
+    /* REGALOS PEQUEÑOS */
+
+    .lista-regalos {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 25px;
+    }
+
+    .regalo-pequeno {
+      width: 130px;
+      height: 110px;
+      border: 2px solid #79ff72;
+      background-color: #161616;
+      color: #ffffff;
+      cursor: pointer;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+
+    .regalo-pequeno:hover {
+      transform: translateY(-5px);
+      background-color: #202920;
+    }
+
+    .regalo-pequeno span {
+      font-size: 35px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .contenido-regalo {
+      display: none;
+      margin-top: 25px;
+      padding: 18px;
+      border: 1px dashed #777777;
+      background-color: #0d0d0d;
+    }
+
+    .foto {
+      width: 250px;
+      max-width: 100%;
+      height: 170px;
+      border: 8px solid #eeeeee;
+      border-bottom-width: 35px;
+      background-color: #333333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      color: #aaaaaa;
+      transform: rotate(2deg);
+    }
+
+    .confeti {
+      position: fixed;
+      top: -20px;
+      font-size: 20px;
+      animation: caer 3s linear forwards;
+      z-index: 100;
+    }
+
+    @keyframes caer {
+      from {
+        transform: translateY(-20px) rotate(0deg);
+      }
+
+      to {
+        transform: translateY(110vh) rotate(500deg);
+      }
+    }
+
+    .firma {
+      color: #777777;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 28px;
+      }
+
+      .ventana {
+        padding: 20px;
+      }
+
+      .barra {
+        margin: -20px -20px 20px -20px;
+      }
+
+      .regalo {
+        transform: scale(0.8);
+      }
+
+      .regalo.abierto {
+        transform: scale(0.8);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- PANTALLA 1 -->
+
+  <section id="pantalla1" class="pantalla activa">
+    <div class="ventana">
+
+      <div class="barra">
+        <span class="punto rojo"></span>
+        <span class="punto amarillo"></span>
+        <span class="punto verde"></span>
+
+        para Diego.exe
+      </div>
+
+      <div id="terminal" class="texto-terminal"></div>
+
+      <div id="inicio" style="display: none;">
+        <h1>
+          hola :)
+        </h1>
+
+        <p>
+          Hice esto porque mandar solamente<br>
+          “feliz cumpleaños” era muy facil y yo soy muy pro.
+        </p>
+
+        <p>
+          todavia no soy hacker, pero el fondo es negro,<br>
+          así que practicamente cuenta, es un spoiler practicamente.
+        </p>
+
+        <button onclick="iniciarSorpresa()">
+          ejecutar sorpresa
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PANTALLA 2 -->
+
+  <section id="pantalla2" class="pantalla">
+    <div class="ventana">
+
+      <div class="barra">
+        <span class="punto rojo"></span>
+        <span class="punto amarillo"></span>
+        <span class="punto verde"></span>
+
+        regalo_final_ahora_si.html
+      </div>
+
+      <h1>
+        encontré esto en la deep web :O
+      </h1>
+
+      <p>
+        No creo que tenga virus
+      </p>
+
+      <p class="error">
+        advertencia: contiene sentimientos
+      </p>
+
+      <div id="regalo" class="regalo" onclick="abrirRegalo()">
+
+        <div class="sorpresa uno">⭐</div>
+        <div class="sorpresa dos">🎂</div>
+        <div class="sorpresa tres">💿</div>
+        <div class="sorpresa cuatro">🎮</div>
+        <div class="sorpresa cinco">💚</div>
+
+        <div class="tapa"></div>
+
+        <div class="caja">
+          <div class="cinta-vertical"></div>
+        </div>
+
+        <div class="etiqueta">
+          no abrir antes del cumpleaños
+        </div>
+
+      </div>
+
+      <p id="instruccion">
+        haz clic en la caja
+      </p>
+
+      <div id="mensajeCumple">
+        <h2>
+          alejo te dice= FELIZ CUMPLEAÑOS :D
+        </h2>
+
+        <p>
+          Si ves esto es que funciono el codigo ejejej<br>
+          Avisame si lo viste (sticker de gato) - no se poner stickers
+        </p>
+
+        <button onclick="mostrarRegalos()">
+          ver archivos encriptados
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PANTALLA 3 -->
+
+  <section id="pantalla3" class="pantalla">
+    <div class="ventana">
+
+      <div class="barra">
+        <span class="punto rojo"></span>
+        <span class="punto amarillo"></span>
+        <span class="punto verde"></span>
+
+        carpeta_super_secreta
+      </div>
+
+      <h1>
+        archivos recuperados del historial del incognito (fuego/berenjena)
+      </h1>
+
+      <p>
+        Haz clic en cada uno por favor
+      </p>
+
+      <div class="lista-regalos">
+
+        <div
+          class="regalo-pequeno"
+          onclick="verContenido('carta')"
+        >
+          <span>📄</span>
+          carta.txt
+        </div>
+
+        <div
+          class="regalo-pequeno"
+          onclick="verContenido('foto')"
+        >
+          <span>📷</span>
+          recuerdo.jpg
+        </div>
+
+        <div
+          class="regalo-pequeno"
+          onclick="verContenido('codigo')"
+        >
+          <span>💻</span>
+          codigo.js
+        </div>
+
+      </div>
+
+      <div id="carta" class="contenido-regalo">
+        <div class="nota">
+          Hola.
+          <br><br>
+
+          Estoy estudiando sistemas para momentos como este 
+          <br><br>
+
+          Espero que tengas un cumpleaños muy bonito, que este nuevo
+          año te traiga buenas experiencias, tranquilidad y muchas
+          cosas que realmente te hagan feliz, abrazosss
+          <br><br>
+
+          Gracias por ser Diego
+          <br><br>
+
+          Feliz cumpleaños :)
+        </div>
+      </div>
+
+      <div id="foto" class="contenido-regalo">
+        <p>
+          Aquí debería ir una foto bonita:
+        </p>
+
+        <img
+  class="foto"
+  src="https://res.cloudinary.com/tekcmhow/image/upload/v1783651028/IMG_2563_s3hpxd.jpg"
+  alt="Un recuerdo bonito"
+  style="object-fit: cover; padding: 0;"
+>
+
+        <p>
+          Queria poner un video pero no se como,<br>
+          asi que tendrás que imaginarlo
+        </p>
+      </div>
+
+      <div id="codigo" class="contenido-regalo">
+        <div class="texto-terminal">
+          const persona = "tú";
+          <br><br>
+
+          if (persona === "tú") {
+          <br>
+          &nbsp;&nbsp;console.log("eres increíble");
+          <br>
+          &nbsp;&nbsp;console.log("feliz cumpleaños");
+          <br>
+          }
+          <br><br>
+
+          //
+          <br>
+          // el mensaje se entiende, cierto?
+        </div>
+      </div>
+
+      <button onclick="reiniciar()">
+        reiniciar programa
+      </button>
+
+      <div class="firma">
+        hecho con html, css, javascript<br>
+        y muchos tutoriales del profe alex
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    const mensajes = [
+      "> iniciando programa...",
+      "> buscando regalo...",
+      "> encontrando tutorial en internet...",
+      "> copiando código sin romper nada...",
+      "> error: demasiados sentimientos",
+      "> ignorando error...",
+      "> programa listo."
+    ];
+
+    let lineaActual = 0;
+
+    function escribirTerminal() {
+      const terminal = document.getElementById("terminal");
+
+      if (lineaActual < mensajes.length) {
+        terminal.innerHTML += mensajes[lineaActual] + "<br>";
+        lineaActual++;
+
+        setTimeout(escribirTerminal, 500);
+      } else {
+        terminal.innerHTML += '<span class="cursor">_</span>';
+
+        setTimeout(function () {
+          document.getElementById("inicio").style.display = "block";
+        }, 500);
+      }
+    }
+
+    function cambiarPantalla(actual, siguiente) {
+      document
+        .getElementById(actual)
+        .classList.remove("activa");
+
+      document
+        .getElementById(siguiente)
+        .classList.add("activa");
+    }
+
+    function iniciarSorpresa() {
+      cambiarPantalla("pantalla1", "pantalla2");
+    }
+
+    function abrirRegalo() {
+      const regalo = document.getElementById("regalo");
+
+      if (regalo.classList.contains("abierto")) {
+        return;
+      }
+
+      regalo.classList.add("abierto");
+
+      document.getElementById("instruccion").style.display = "none";
+
+      crearConfeti();
+
+      setTimeout(function () {
+        document.getElementById("mensajeCumple").style.display = "block";
+      }, 900);
+    }
+
+    function mostrarRegalos() {
+      cambiarPantalla("pantalla2", "pantalla3");
+      crearConfeti();
+    }
+
+    function verContenido(id) {
+      const contenidos = document.querySelectorAll(".contenido-regalo");
+
+      contenidos.forEach(function (contenido) {
+        contenido.style.display = "none";
+      });
+
+      document.getElementById(id).style.display = "block";
+    }
+
+    function crearConfeti() {
+      const simbolos = ["0", "1", "*", "+", "♥", "{", "}", ";"];
+
+      for (let i = 0; i < 45; i++) {
+        const confeti = document.createElement("div");
+
+        confeti.classList.add("confeti");
+
+        confeti.innerText =
+          simbolos[Math.floor(Math.random() * simbolos.length)];
+
+        confeti.style.left =
+          Math.random() * 100 + "vw";
+
+        confeti.style.color =
+          Math.random() > 0.5
+            ? "#79ff72"
+            : "#ffffff";
+
+        confeti.style.animationDuration =
+          2 + Math.random() * 3 + "s";
+
+        confeti.style.animationDelay =
+          Math.random() * 0.5 + "s";
+
+        document.body.appendChild(confeti);
+
+        setTimeout(function () {
+          confeti.remove();
+        }, 6000);
+      }
+    }
+
+    function reiniciar() {
+      document.getElementById("regalo").classList.remove("abierto");
+      document.getElementById("mensajeCumple").style.display = "none";
+      document.getElementById("instruccion").style.display = "block";
+
+      const contenidos = document.querySelectorAll(".contenido-regalo");
+
+      contenidos.forEach(function (contenido) {
+        contenido.style.display = "none";
+      });
+
+      cambiarPantalla("pantalla3", "pantalla1");
+    }
+
+    escribirTerminal();
+  </script>
+
+</body>
+</html>
